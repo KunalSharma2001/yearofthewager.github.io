@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YearOfTheWager — Mixed Game Scorecard</title>
+    <meta name="description"
+        content="YearOfTheWager presents the free three-minute Mixed Game Scorecard to show you where your game is leaking and what to fix first." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --cream: #F4F8FB;
+            --cream-mid: #DCE7F0;
+            --cream-dark: #C4D6E2;
+            --forest: #0B2D5A;
+            --forest-mid: #0F4371;
+            --forest-light: #138695;
+            --gold: #F7C95B;
+            --gold-light: #F8D77A;
+            --ink: #10203A;
+            --ink-mid: #3C5870;
+            --muted: #6A7A92;
+            --border: rgba(17, 34, 59, 0.12);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--cream);
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 6vw;
+            background: rgba(250, 248, 244, 0.94);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: var(--forest);
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-logo img {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 8px 24px rgba(11, 45, 90, 0.16);
+        }
+
+        .nav-logo-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.15rem;
+        }
+
+        .nav-logo-text span {
+            color: var(--gold);
+        }
+
+        .nav-cta {
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--cream);
+            background: var(--forest);
+            padding: 11px 24px;
+            border-radius: 3px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--forest-light);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 130px 6vw 100px;
+            overflow: hidden;
+            background: var(--cream);
+        }
+
+        /* Dark right block */
+        .hero-bg-block {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 44%;
+            height: 100%;
+            background: var(--forest);
+            clip-path: polygon(16% 0%, 100% 0%, 100% 100%, 0% 100%);
+            z-index: 0;
+        }
+
+        /* Dot grid on light side */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 58%;
+            height: 100%;
+            background-image: radial-gradient(circle, var(--cream-dark) 1px, transparent 1px);
+            background-size: 28px 28px;
+            opacity: 0.55;
+            z-index: 0;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 80px;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 22px;
+        }
+
+        .eyebrow::before {
+            content: '';
+            display: block;
+            width: 28px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+            font-weight: 700;
+            line-height: 1.13;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--forest);
+        }
+
+        .hero-sub {
+            font-size: 1.02rem;
+            color: var(--ink-mid);
+            max-width: 500px;
+            margin-bottom: 40px;
+            font-weight: 400;
+            line-height: 1.8;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--cream);
+            background: var(--forest);
+            padding: 17px 36px;
+            border-radius: 3px;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-primary:hover {
+            background: var(--forest-light);
+            transform: translateY(-1px);
+        }
+
+        /* Hero right — dark panel */
+        .hero-right {
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-card {
+            background: rgba(250, 248, 244, 0.06);
+            border: 1px solid rgba(250, 248, 244, 0.13);
+            border-radius: 4px;
+            padding: 44px 38px;
+            max-width: 340px;
+            width: 100%;
+        }
+
+        .hero-card-label {
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(250, 248, 244, 0.38);
+            margin-bottom: 28px;
+        }
+
+        .hero-card-item {
+            padding: 22px 0;
+            border-bottom: 1px solid rgba(250, 248, 244, 0.09);
+        }
+
+        .hero-card-item:first-of-type {
+            padding-top: 0;
+        }
+
+        .hero-card-item:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .hero-card-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            color: var(--cream);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .hero-card-number span {
+            color: var(--gold-light);
+            font-size: 1.4rem;
+            vertical-align: middle;
+        }
+
+        .hero-card-desc {
+            font-size: 0.8rem;
+            color: rgba(250, 248, 244, 0.45);
+        }
+
+        /* ── SECTION BASE ── */
+        section {
+            padding: 100px 6vw;
+        }
+
+        .section-inner {
+            max-width: 1060px;
+            margin: 0 auto;
+        }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--forest-light);
+            margin-bottom: 16px;
+        }
+
+        .section-tag::before {
+            content: '';
+            display: block;
+            width: 22px;
+            height: 1px;
+            background: var(--forest-light);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--ink);
+            margin-bottom: 18px;
+        }
+
+        .section-body {
+            font-size: 0.98rem;
+            color: var(--muted);
+            line-height: 1.85;
+        }
+
+        /* ── SECTION 2: VALUE PROP ── */
+        .value-section {
+            background: var(--cream-mid);
+        }
+
+        .value-intro {
+            max-width: 720px;
+            margin-bottom: 60px;
+        }
+
+        .value-intro .section-body {
+            font-size: 1rem;
+            color: var(--ink-mid);
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .pillar-card {
+            background: var(--cream-mid);
+            padding: 40px 34px;
+            transition: background 0.2s;
+        }
+
+        .pillar-card:hover {
+            background: var(--cream);
+        }
+
+        .pillar-suit {
+            font-size: 1.5rem;
+            color: var(--forest);
+            margin-bottom: 18px;
+            display: block;
+        }
+
+        .pillar-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .pillar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 14px;
+            line-height: 1.25;
+        }
+
+        .pillar-desc {
+            font-size: 0.88rem;
+            color: var(--muted);
+            line-height: 1.78;
+        }
+
+        .value-footer {
+            margin-top: 44px;
+            padding: 28px 34px;
+            background: var(--forest);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .value-footer-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .value-footer-text {
+            font-size: 0.92rem;
+            color: rgba(250, 248, 244, 0.8);
+            line-height: 1.65;
+        }
+
+        .value-footer-text strong {
+            color: var(--cream);
+            font-weight: 600;
+        }
+
+        /* ── SECTION 3: CREDIBILITY ── */
+        .cred-section {
+            background: var(--cream);
+        }
+
+        .cred-grid {
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        .photo-wrap {
+            position: relative;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            aspect-ratio: 4/5;
+            background: var(--cream-dark);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .photo-wrap::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 46px;
+            height: 46px;
+            border-top: 2px solid var(--forest);
+            border-left: 2px solid var(--forest);
+        }
+
+        .photo-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            width: 46px;
+            height: 46px;
+            border-bottom: 2px solid var(--forest);
+            border-right: 2px solid var(--forest);
+        }
+
+        /* Name badge below photo */
+        .name-badge {
+            margin-top: 20px;
+            padding: 18px 20px;
+            background: var(--forest);
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .name-badge-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--cream);
+            font-weight: 600;
+        }
+
+        .name-badge-alias {
+            font-size: 0.75rem;
+            color: var(--gold-light);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .cred-body {
+            font-size: 0.97rem;
+            color: var(--ink-mid);
+            line-height: 1.85;
+            margin-bottom: 36px;
+        }
+
+        .cred-badges {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+
+        .cred-badge {
+            background: var(--cream-mid);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .cred-badge-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--forest);
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+
+        .cred-badge-text {
+            font-size: 0.85rem;
+            color: var(--ink-mid);
+            line-height: 1.55;
+        }
+
+        .cred-badge-text strong {
+            display: block;
+            color: var(--ink);
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .cred-callout {
+            background: var(--cream-mid);
+            border-left: 3px solid var(--forest);
+            padding: 22px 24px;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .cred-callout p {
+            font-size: 0.92rem;
+            color: var(--ink-mid);
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        /* ── SECTION 4: FINAL CTA ── */
+        .cta-section {
+            background: var(--forest);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle felt texture */
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(255, 255, 255, 0.012) 5px, rgba(255, 255, 255, 0.012) 6px),
+                repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(255, 255, 255, 0.012) 5px, rgba(255, 255, 255, 0.012) 6px);
+        }
+
+        .cta-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 740px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .cta-inner .section-tag {
+            justify-content: center;
+            color: rgba(250, 248, 244, 0.4);
+        }
+
+        .cta-inner .section-tag::before {
+            background: rgba(250, 248, 244, 0.2);
+        }
+
+        .cta-inner .section-title {
+            color: var(--cream);
+            margin-bottom: 20px;
+        }
+
+        .cta-body {
+            font-size: 1rem;
+            color: rgba(250, 248, 244, 0.65);
+            line-height: 1.85;
+            max-width: 580px;
+            margin: 0 auto 44px;
+        }
+
+        .cta-proof {
+            display: flex;
+            justify-content: center;
+            gap: 36px;
+            flex-wrap: wrap;
+            margin-top: 28px;
+        }
+
+        .cta-proof-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            color: rgba(250, 248, 244, 0.45);
+            letter-spacing: 0.05em;
+        }
+
+        .cta-proof-check {
+            width: 16px;
+            height: 16px;
+            border: 1px solid rgba(250, 248, 244, 0.2);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 0.6rem;
+            color: var(--gold-light);
+        }
+
+        .btn-cta {
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--forest);
+            background: var(--cream);
+            padding: 18px 44px;
+            border-radius: 3px;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-cta:hover {
+            background: var(--cream-mid);
+            transform: translateY(-1px);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--forest);
+            padding: 32px 6vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            color: var(--cream);
+            font-size: 0.95rem;
+            text-decoration: none;
+        }
+
+        .footer-logo span {
+            color: var(--gold-light);
+        }
+
+        .footer-note {
+            font-size: 0.73rem;
+            color: rgba(250, 248, 244, 0.28);
+        }
+
+        /* ── REVEAL ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .d1 {
+            transition-delay: 0.1s;
+        }
+
+        .d2 {
+            transition-delay: 0.2s;
+        }
+
+        .d3 {
+            transition-delay: 0.3s;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 960px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .hero-bg-block {
+                width: 100%;
+                clip-path: none;
+                opacity: 0.06;
+            }
+
+            .hero-right {
+                display: none;
+            }
+
+            .hero {
+                padding-bottom: 80px;
+            }
+
+            .pillars-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cred-grid {
+                grid-template-columns: 1fr;
+                gap: 52px;
+            }
+
+            .cred-badges {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 16px 5vw;
+            }
+
+            .hero {
+                padding: 110px 5vw 70px;
+            }
+
+            section {
+                padding: 70px 5vw;
+            }
+
+            .value-footer {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            footer {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cta-proof {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a class="nav-logo" href="#">
+            <img src="YOTW.jpg" alt="YearOfTheWager logo" />
+            <span class="nav-logo-text">YearOfTheWager <span></span></span>
+        </a>
+        <a class="nav-cta" href="#scorecard">Start My Scorecard</a>
+    </nav>
+
+    <!-- ── SECTION 1: HOOK ── -->
+    <section class="hero">
+        <div class="hero-bg-block"></div>
+        <div class="hero-inner">
+            <div class="hero-left">
+                <div class="eyebrow">YearOfTheWager Scorecard</div>
+                <h1>Tired of sitting out every time the game rotates into something that <em>isn't Hold'em?</em></h1>
+                <p class="hero-sub">
+                    Take the free three-minute Mixed Game Scorecard and find out why you're leaking chips in the mixed
+                    games — and the fastest path to becoming profitable in every game the table can throw at you.
+                </p>
+                <a href="YOUR_JOTFORM_LINK" target="_blank" rel="noopener" class="btn-primary">Start My Scorecard</a>
+            </div>
+            <div class="hero-right">
+                <div class="hero-card">
+                    <div class="hero-card-label">What you'll walk away with</div>
+                    <div class="hero-card-item">
+                        <div class="hero-card-number">3<span> min</span></div>
+                        <div class="hero-card-desc">That's all it takes — 15 honest questions</div>
+                    </div>
+                    <div class="hero-card-item">
+                        <div class="hero-card-number">3<span> scores</span></div>
+                        <div class="hero-card-desc">Game Coverage, Strategic Discipline, In-Game Execution</div>
+                    </div>
+                    <div class="hero-card-item">
+                        <div class="hero-card-number">1<span> plan</span></div>
+                        <div class="hero-card-desc">Personalised — tells you which gap to close first</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 2: VALUE PROP ── -->
+    <section class="value-section">
+        <div class="section-inner">
+            <div class="value-intro reveal">
+                <div class="section-tag">What the Scorecard measures</div>
+                <h2 class="section-title">In fifteen honest questions, we score the three things that separate a
+                    profitable mixed-game player from everyone who quietly sits out.</h2>
+                <p class="section-body" style="margin-top:14px;">We show you how to improve each one.</p>
+            </div>
+
+            <div class="pillars-grid">
+                <div class="pillar-card reveal">
+                    <span class="pillar-suit">♠</span>
+                    <div class="pillar-number">Pillar 01</div>
+                    <div class="pillar-title">Game Coverage</div>
+                    <p class="pillar-desc">How many of the games you can actually sit down and play with real confidence
+                        — from Stud and Razz to Omaha-8, the draws, and the rest of the rotation.</p>
+                </div>
+                <div class="pillar-card reveal d1">
+                    <span class="pillar-suit">♦</span>
+                    <div class="pillar-number">Pillar 02</div>
+                    <div class="pillar-title">Strategic Discipline</div>
+                    <p class="pillar-desc">The parts of the game that have nothing to do with cards — your bankroll,
+                        your game selection, your seat selection, and the way you hold your composure across a long
+                        mixed session.</p>
+                </div>
+                <div class="pillar-card reveal d2">
+                    <span class="pillar-suit">♣</span>
+                    <div class="pillar-number">Pillar 03</div>
+                    <div class="pillar-title">In-Game Execution</div>
+                    <p class="pillar-desc">Reading boards, knowing when you're playing for the high, the low or the
+                        scoop, and making the right decision in real time while the game keeps changing underneath you.
+                    </p>
+                </div>
+            </div>
+
+            <div class="value-footer reveal">
+                <div class="value-footer-icon">♥</div>
+                <div class="value-footer-text">
+                    You walk away with <strong>a clear score on each of the three</strong>, and a personalised plan that
+                    tells you <strong>which gap to close first</strong>.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 3: CREDIBILITY ── -->
+    <section class="cred-section" id="about">
+        <div class="section-inner">
+            <div class="cred-grid">
+
+                <div class="reveal">
+                    <div class="photo-wrap">
+                        <!-- Replace with: <img src="troy.jpg" alt="Mr. Troy Evans" style="width:100%;border-radius:3px;" /> -->
+                        <div class="photo-placeholder">
+                            <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#aaa" stroke-width="1">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            <span>Photo of Mr. Troy</span>
+                        </div>
+                    </div>
+                    <div class="name-badge">
+                        <div class="name-badge-name">Mr. Troy Evans</div>
+                        <div class="name-badge-alias">Known at the tables as 2commas</div>
+                    </div>
+                </div>
+
+                <div class="cred-right reveal d1">
+                    <div class="section-tag">Learn from someone who has lived it</div>
+                    <h2 class="section-title">This is not a theory pulled off a forum.</h2>
+                    <p class="cred-body">
+                        The Mixed Game Scorecard was built by Mr. Troy Evans — a player who didn't just study the game
+                        but actually ran it. He spent years as the Director of Poker Operations at Hard Rock Casino in
+                        Las Vegas, holds an MBA in strategic growth and leadership that he applies directly to the way
+                        he approaches the game, and now coaches full-time while hosting the <em>Year of the Wager</em>
+                        channel.
+                    </p>
+
+                    <div class="cred-badges">
+                        <div class="cred-badge">
+                            <div class="cred-badge-dot"></div>
+                            <div class="cred-badge-text"><strong>Hard Rock Casino, Las Vegas</strong>Director of Poker
+                                Operations</div>
+                        </div>
+                        <div class="cred-badge">
+                            <div class="cred-badge-dot"></div>
+                            <div class="cred-badge-text"><strong>MBA</strong>Strategic Growth & Leadership</div>
+                        </div>
+                        <div class="cred-badge">
+                            <div class="cred-badge-dot"></div>
+                            <div class="cred-badge-text"><strong>WSOP Mixed-Game Cashes</strong>Multiple final table
+                                appearances</div>
+                        </div>
+                        <div class="cred-badge">
+                            <div class="cred-badge-dot"></div>
+                            <div class="cred-badge-text"><strong>Year of the Wager</strong>Full-time coach & channel
+                                host</div>
+                        </div>
+                    </div>
+
+                    <div class="cred-callout">
+                        <p>Most live players only ever truly learn one game, and that game is Hold'em — so the moment a
+                            table rotates into a mixed lineup, they are quietly guessing. This Scorecard is built on
+                            real games at real stakes, and it exists to show you precisely where you stand and what to
+                            fix first.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── SECTION 4: FINAL CTA ── -->
+    <section class="cta-section" id="scorecard">
+        <div class="section-inner">
+            <div class="cta-inner">
+                <div class="section-tag">Three minutes. No card required.</div>
+                <h2 class="section-title reveal">Find out where you really stand.</h2>
+                <p class="cta-body reveal d1">
+                    Taking the Scorecard costs you nothing and takes about three minutes. At the end of it you get a
+                    personalised result with recommendations you can act on the same day. There is no risk and no card
+                    required — just an honest picture of your game and the quickest route from where you are now to a
+                    profit.
+                </p>
+                <!-- Replace YOUR_JOTFORM_LINK with your actual JotForm URL -->
+                <a href="YOUR_JOTFORM_LINK" target="_blank" rel="noopener" class="btn-cta reveal d2">Start My
+                    Scorecard</a>
+                <div class="cta-proof reveal d3">
+                    <div class="cta-proof-item">
+                        <div class="cta-proof-check">✓</div>Free, always
+                    </div>
+                    <div class="cta-proof-item">
+                        <div class="cta-proof-check">✓</div>No card required
+                    </div>
+                    <div class="cta-proof-item">
+                        <div class="cta-proof-check">✓</div>Results you can act on today
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <a class="footer-logo" href="#">YearOfThe <span>Wager</span> — Mixed Game Coaching</a>
+        <span class="footer-note">© 2025 YearOfTheWager. All rights reserved.</span>
+    </footer>
+
+    <script>
+        // Scroll reveal
+        const observer = new IntersectionObserver(
+            entries => entries.forEach(e => {
+                if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+            }),
+            { threshold: 0.1 }
+        );
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Hero entrance animation
+        const heroEls = document.querySelectorAll('.hero-left > *');
+        heroEls.forEach((el, i) => {
+            el.style.cssText = 'opacity:0;transform:translateY(18px);transition:opacity 0.65s ease,transform 0.65s ease;';
+            setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, 180 + i * 130);
+        });
+    </script>
+
+</body>
+
+</html>
